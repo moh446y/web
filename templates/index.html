@@ -3,150 +3,150 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KeyGen Hamster Deluxe 🐹✨</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <title>KeyGen Hamster</title>
     <style>
         body {
-            font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: #fff;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
             padding: 20px;
-            box-sizing: border-box;
         }
         .container {
             display: flex;
             justify-content: space-between;
-            max-width: 1200px;
-            width: 100%;
-            gap: 30px;
+            max-width: 1000px;
+            margin: 0 auto;
         }
         .form-container {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-            border: 1px solid rgba(255, 255, 255, 0.18);
-            flex: 1;
-            transition: all 0.3s ease;
-        }
-        .form-container:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.5);
-        }
-        h2 {
-            margin-top: 0;
-            margin-bottom: 20px;
-            text-align: center;
-            font-weight: 600;
-            color: #fff;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        }
-        select, button {
-            width: 100%;
-            padding: 12px;
-            margin-bottom: 15px;
-            border: none;
+            width: 48%;
+            background-color: #fff;
+            padding: 20px;
             border-radius: 10px;
-            background: rgba(255, 255, 255, 0.2);
-            color: #fff;
-            font-size: 16px;
-            transition: all 0.3s ease;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            overflow: auto;
+        }
+        .form-container h2 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        .form-container > * {
+            margin-bottom: 10px;
+        }
+        input[type="file"],
+        input[type="text"],
+        textarea,
+        select {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
         }
         select {
             appearance: none;
-            background-image: url('data:image/svg+xml;utf8,<svg fill="%23ffffff" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>');
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-image: url('data:image/svg+xml;utf8,<svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 8 4"><path d="M4 4L0 0h8z"/></svg>');
             background-repeat: no-repeat;
-            background-position: right 10px center;
-            background-size: 20px;
-            padding-right: 40px;
+            background-position: right 8px center;
+            background-size: 8px;
         }
         button {
-            background: linear-gradient(45deg, #FF6B6B, #FFD93D);
-            font-weight: 600;
+            width: calc(100% - 22px);
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
             cursor: pointer;
-            box-shadow: 0 4px 15px 0 rgba(255, 107, 107, 0.75);
+            margin-top: 10px;
+            display: block;
         }
         button:hover {
-            background: linear-gradient(45deg, #FFD93D, #FF6B6B);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px 0 rgba(255, 107, 107, 0.8);
+            background-color: #0056b3;
+        }
+        .custom-file-upload {
+            display: inline-block;
+            position: relative;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+        .custom-file-upload input[type="file"] {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+            font-size: 100px;
+            cursor: pointer;
+            opacity: 0;
+        }
+        label {
+            display: block;
         }
         #jsonDataDisplay {
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 10px;
-            padding: 15px;
-            font-family: 'Courier New', monospace;
-            white-space: pre-wrap;
-            word-break: break-all;
-            max-height: 300px;
-            overflow-y: auto;
-            scrollbar-width: thin;
-            scrollbar-color: #ffffff40 transparent;
+            white-space: pre;
+            background-color: #f9f9f9;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-top: 10px;
+            font-family: monospace;
+            overflow-x: auto;
+            max-height: 100px;
         }
-        #jsonDataDisplay::-webkit-scrollbar {
-            width: 8px;
+        .json-key {
+            color: red;
         }
-        #jsonDataDisplay::-webkit-scrollbar-thumb {
-            background-color: #ffffff40;
-            border-radius: 4px;
+        .json-string {
+            color: green;
         }
-        .hidden-message {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 14px;
-            opacity: 0;
-            transition: opacity 0.3s ease;
+        .json-boolean {
+            color: goldenrod;
         }
-        @media screen and (max-width: 768px) {
+        @media screen and (min-width: 801px) {
             .container {
-                flex-direction: column;
+                gap: 20px;
             }
         }
-        .emoji {
-            font-size: 24px;
-            margin-right: 10px;
-            vertical-align: middle;
-        }
-        .sparkle {
-            position: absolute;
-            pointer-events: none;
-            animation: sparkle 1.5s ease-in-out infinite;
-        }
-        @keyframes sparkle {
-            0%, 100% { opacity: 0; transform: scale(0); }
-            50% { opacity: 1; transform: scale(1); }
+        @media screen and (max-width: 800px) {
+            .container {
+                flex-direction: column;
+                align-items: center;
+            }
+            .form-container {
+                width: 95%;
+                margin-bottom: 20px;
+            }
+            #jsonDataDisplay {
+                width: 95%;
+                margin: 0 auto;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="form-container animate__animated animate__fadeInLeft">
-            <h2><span class="emoji">🎮</span>Key Generator Deluxe</h2>
+        <div class="form-container">
+            <h2>Form for generating keys</h2>
+            <label for="appSelect">Select an application:</label>
             <select id="appSelect" onchange="updateConstants()">
-                <option value="Bike">Bike Ride 3D 🚴‍♂️</option>
-                <option value="Clone">My Clone Army 🪞</option>
-                <option value="Chain">Chain Cube 2048 🎲</option>
-                <option value="Train">Train Miner 🚂</option>
+                <option value="Bike">Bike Ride 3D🚴‍♂️</option>
+                <option value="Clone">My Clone Army🪞</option>
+                <option value="Chain">Chain Cube 2048🎲</option>
+                <option value="Train">Train Miner🚂</option>
             </select>
-            <button onclick="generateKeys()">Generate Magical Keys ✨</button>
-            <button onclick="copyKeys()">Copy Golden Keys 📋</button>
+            <button onclick="generateKeys()">Generate Hamster Key</button>
+            <button onclick="copyKeys()">Copy the received keys</button>
         </div>
 
-        <div class="form-container animate__animated animate__fadeInRight">
-            <h2><span class="emoji">💻</span>Enchanted Terminal</h2>
+        <div class="form-container">
+            <h2>Terminal</h2>
             <pre id="jsonDataDisplay" class="key-display"></pre>
         </div>
     </div>
-    <div class="hidden-message" id="secretMessage">You've found a secret! 🎉</div>
 
     <script>
         const appConfigs = {
@@ -250,51 +250,50 @@
         }
 
         async function emulateProgress(clientToken) {
-            const eventUrl = 'https://api.gamepromo.io/promo/register-event';
-            const headers = {
-                'Authorization': `Bearer ${clientToken}`,
-                'Content-Type': 'application/json'
-            };
-            const eventId = generateClientId();
-            const eventData = {
-                promoId: PROMO_ID,  
-                eventId: eventId,
-                eventOrigin: 'undefined'
-            };
+    const eventUrl = 'https://api.gamepromo.io/promo/register-event';
+    const headers = {
+        'Authorization': `Bearer ${clientToken}`,
+        'Content-Type': 'application/json'
+    };
+    const eventId = generateClientId();
+    const eventData = {
+        promoId: PROMO_ID,  
+        eventId: eventId,
+        eventOrigin: 'undefined'
+    };
 
-            let eventResponse;
-            let eventJson;
+    let eventResponse;
+    let eventJson;
 
-            do {
-                try {
-                    eventResponse = await fetch(eventUrl, {
-                        method: 'POST',
-                        headers: headers,
-                        body: JSON.stringify(eventData)
-                    });
+    do {
+        try {
+            eventResponse = await fetch(eventUrl, {
+                method: 'POST',
+                headers: headers,
+                body: JSON.stringify(eventData)
+            });
 
-                    if (!eventResponse.ok) {
-                        throw new Error(`Error: ${eventResponse.statusText}`);
-                    }
+            if (!eventResponse.ok) {
+                throw new Error(`Error: ${eventResponse.statusText}`);
+            }
 
-                    eventJson = await eventResponse.json();
+            eventJson = await eventResponse.json();
 
-                    if (eventJson.hasCode) {
-                        return true; // Successfully received the code
-                    }
+            if (eventJson.hasCode) {
+                return true; // Successfully received the code
+            }
 
-                    // Wait for 30 seconds before trying again
-                    await sleep(30000);
+            // Wait for 30 seconds before trying again
+            await sleep(30000);
 
-                } catch (error) {
-                    console.error('Error during progress emulation:', error);
-                    return false; // Exit if an error occurs
-                }
-            } while (!eventJson.hasCode);
-
-            return false;
+        } catch (error) {
+            console.error('Error during progress emulation:', error);
+            return false; // Exit if an error occurs
         }
+    } while (!eventJson.hasCode);
 
+    return false;
+}
         async function generateKey(clientToken) {
             if (DEBUG_MODE) {
                 return Math.random() < 0.5 ? 'PROMO-3YD-5ZA6-3VJA-Y77' : '';
@@ -381,13 +380,9 @@
         }
         
         function generateKeys() {
-            addSparkles();
             findValidKeys(NUM_KEYS_TO_GENERATE);
         }
         
-         بالتأكيد، سأكمل الكود من حيث توقفنا:
-
-```html
         function copyKeys() {
             const keyDisplay = document.getElementById('jsonDataDisplay').textContent;
             const keyPattern = /Generated key:\s([A-Za-z0-9\-]+)/g;
@@ -407,47 +402,6 @@
                 alert('No keys to copy.');
             }
         }
-
-        function addSparkles() {
-            for (let i = 0; i < 20; i++) {
-                const sparkle = document.createElement('div');
-                sparkle.className = 'sparkle';
-                sparkle.style.left = `${Math.random() * 100}vw`;
-                sparkle.style.top = `${Math.random() * 100}vh`;
-                sparkle.style.animationDelay = `${Math.random() * 2}s`;
-                sparkle.innerHTML = '✨';
-                document.body.appendChild(sparkle);
-                setTimeout(() => sparkle.remove(), 1500);
-            }
-        }
-
-        document.addEventListener('mousemove', (e) => {
-            if (e.clientY > window.innerHeight - 50) {
-                document.getElementById('secretMessage').style.opacity = '1';
-            } else {
-                document.getElementById('secretMessage').style.opacity = '0';
-            }
-        });
-
-        // Add some interactivity and animations
-        document.querySelectorAll('button').forEach(button => {
-            button.addEventListener('mouseenter', () => {
-                button.classList.add('animate__animated', 'animate__pulse');
-            });
-            button.addEventListener('mouseleave', () => {
-                button.classList.remove('animate__animated', 'animate__pulse');
-            });
-        });
-
-        // Make the form containers glow on hover
-        document.querySelectorAll('.form-container').forEach(container => {
-            container.addEventListener('mouseenter', () => {
-                container.style.boxShadow = '0 0 20px rgba(255, 255, 255, 0.5)';
-            });
-            container.addEventListener('mouseleave', () => {
-                container.style.boxShadow = '0 8px 32px 0 rgba(31, 38, 135, 0.37)';
-            });
-        });
     </script>
 </body>
 </html>
