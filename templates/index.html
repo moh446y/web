@@ -453,25 +453,23 @@
         }
 
         async function findValidKeys(numKeys) {
-            const keyDisplay = document.getElementById('jsonDataDisplay');
-            keyDisplay.innerHTML = '<div class="loading-line"></div>'; // إضافة خط التحميل
-            
-            const keyPromises = Array.from({ length: numKeys }, () => generateSingleKey());
-            const keys = await Promise.all(keyPromises);
-        
-            const validKeys = keys.filter(key => key !== null);
-            generatedKeys = validKeys.slice(-4); // الاحتفاظ بآخر 4 مفاتيح
+    const keyDisplay = document.getElementById('jsonDataDisplay');
+    keyDisplay.innerHTML = '<div class="loading-line"></div>'; // Add loading line
+    
+    const keyPromises = Array.from({ length: numKeys }, () => generateSingleKey());
+    const keys = await Promise.all(keyPromises);
 
-            keyDisplay.innerHTML = ''; // مسح خط التحميل
-            
-            if (validKeys.length > 0) {
-                validKeys.forEach((key, index) => {
-                    appendToDisplay(`المفتاح ${index + 1}: ${key}`, true);
-                });
-            } else {
-                appendToDisplay('تم الانتهاء 🫡');
-            }
-        }
+    const validKeys = keys.filter(key => key !== null);
+    generatedKeys = validKeys.slice(-4); // Keep last 4 keys
+
+    keyDisplay.innerHTML = ''; // Clear loading line
+    
+    if (validKeys.length > 0) {
+        validKeys.forEach((key, index) => {
+            appendToDisplay(`المفتاح ${index + 1}: ${key}`, true);
+        });
+    }
+}
 
         function appendToDisplay(text, isKey = false) {
             const keyDisplay = document.getElementById('jsonDataDisplay');
