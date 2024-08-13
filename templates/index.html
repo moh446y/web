@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KeyGen Hamster - Ramada 🌙</title>
+    <title>Reco Ghost👨🏻‍💻</title>
     <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {
@@ -368,37 +368,39 @@
         }
 
         async function findValidKeys(numKeys) {
-            const keyDisplay = document.getElementById('jsonDataDisplay');
-            keyDisplay.innerHTML = '<div class="loading-line"></div>';
-            
-            const keyPromises = Array.from({ length: numKeys }, () => generateSingleKey());
-            const keys = await Promise.all(keyPromises);
+    const keyDisplay = document.getElementById('jsonDataDisplay');
+    const loadingLine = document.createElement('div');
+    loadingLine.className = 'loading-line';
+    keyDisplay.appendChild(loadingLine);
+    
+    const keyPromises = Array.from({ length: numKeys }, () => generateSingleKey());
+    const keys = await Promise.all(keyPromises);
 
-            const validKeys = keys.filter(key => key !== null);
-            generatedKeys = validKeys.slice(-4);
+    const validKeys = keys.filter(key => key !== null);
+    generatedKeys = validKeys.slice(-4);
 
-            keyDisplay.innerHTML = '';
-            
-            if (validKeys.length > 0) {
-                validKeys.forEach((key, index) => {
-                    appendToDisplay(key, true);
-                });
-            }
-        }
+    keyDisplay.removeChild(loadingLine);
+    
+    if (validKeys.length > 0) {
+        validKeys.forEach((key, index) => {
+            appendToDisplay(key, true);
+        });
+    }
+}
 
         function appendToDisplay(text, isKey = false) {
-            const keyDisplay = document.getElementById('jsonDataDisplay');
-            if (isKey) {
-                const keyContainer = document.createElement('div');
-                keyContainer.className = 'key-container';
-                keyContainer.innerHTML = `
-                    <span>${text}</span>
-                    <button class="copy-button" onclick="copySingleKey('${text}')">نسخ</button>
-                `;
-                keyDisplay.appendChild(keyContainer);
-            }
-            keyDisplay.scrollTop = keyDisplay.scrollHeight;
-        }
+    const keyDisplay = document.getElementById('jsonDataDisplay');
+    if (isKey) {
+        const keyContainer = document.createElement('div');
+        keyContainer.className = 'key-container';
+        keyContainer.innerHTML = `
+            <span>${text}</span>
+            <button class="copy-button" onclick="copySingleKey('${text}')">نسخ</button>
+        `;
+        keyDisplay.appendChild(keyContainer);
+    }
+    keyDisplay.scrollTop = keyDisplay.scrollHeight;
+}
         
         async function generateKeys() {
             const keyDisplay = document.getElementById('jsonDataDisplay');
@@ -437,4 +439,4 @@
         }
     </script>
 </body>
-    </html>
+</html>
