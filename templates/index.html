@@ -194,6 +194,28 @@
         .copy-button:hover {
             background-color: #ffea00;
         }
+        .loading-line {
+        height: 4px;
+        width: 100%;
+        background: linear-gradient(to right, #ffd700 0%, #ffd700 50%, transparent 50%, transparent 100%);
+        background-size: 200% 100%;
+        animation: loading 1s linear infinite;
+    }
+
+    @keyframes loading {
+        0% { background-position: 100% 0; }
+        100% { background-position: 0 0; }
+    }
+
+    .key-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+        padding: 5px;
+        background-color: rgba(255, 255, 255, 0.1);
+        border-radius: 5px;
+    }
     </style>
 </head>
 <body>
@@ -432,16 +454,20 @@
 
         async function findValidKeys(numKeys) {
             const keyDisplay = document.getElementById('jsonDataDisplay');
-            keyDisplay.style.display = "block";
-            keyDisplay.innerHTML = ''; // Clear previous content
-        
+            keyDisplay.innerHTML = '<div class="loading-line"></div>'; // إضافة خط التحميل
+            
             const keyPromises = Array.from({ length: numKeys }, () => generateSingleKey());
             const keys = await Promise.all(keyPromises);
         
             const validKeys = keys.filter(key => key !== null);
-            generatedKeys = validKeys.slice(-4); // Keep the last 4
+            generatedKeys = validKeys.slice(-4); // الاحتفاظ بآخر 4 مفاتيح
+
+            keyDisplay.innerHTML = ''; // مسح خط التحميل
+            
             if (validKeys.length > 0) {
-                appendToDisplay(`المفاتيح الصالحة: ${validKeys.join(', ')} 🔑`);
+                validKeys.forEach((key, index) => {
+                    appendToDisplay(`المفتاح ${index + 1}: ${key}`, true);
+                });
             } else {
                 appendToDisplay('تم الانتهاء 🫡');
             }
@@ -461,22 +487,18 @@
                 const textNode = document.createTextNode(text + '\n');
                 keyDisplay.appendChild(textNode);
             }
-            keyDisplay.scrollTop = keyDisplay.scrollHeight; // Auto-scroll to bottom
+            keyDisplay.scrollTop = keyDisplay.scrollHeight; // التمرير التلقائي إلى الأسفل
         }
         
         async function generateKeys() {
-            const loadingDiv = document.querySelector('.loading');
-            const loadingBar = document.querySelector('.loading-bar');
             const keyDisplay = document.getElementById('jsonDataDisplay');
-            loadingDiv.style.display = 'block';
-            loadingBar.style.display = 'block';
-            keyDisplay.innerHTML = '';
+            keyDisplay.innerHTML = ''; // مسح المحتوى السابق
             
             try {
                 await findValidKeys(NUM_KEYS_TO_GENERATE);
-            } finally {
-                loadingDiv.style.display = 'none';
-                loadingBar.style.display = 'none';
+            } catch (error) {
+                console.error('Error generating keys:', error);
+                appendToDisplay('حدث خطأ أثناء إنشاء المفاتيح 😔');
             }
         }
         
@@ -511,4 +533,4 @@
         }
     </script>
 </body>
-    </html>
+</html>
