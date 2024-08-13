@@ -154,45 +154,6 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-        .popup {
-            display: none;
-            position: fixed;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.5);
-            z-index: 1000;
-        }
-        .popup-content {
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-            background-color: #1a1a2e;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
-            text-align: center;
-        }
-        .popup h2 {
-            color: #ffd700;
-            margin-bottom: 20px;
-        }
-        .popup ul {
-            list-style-type: none;
-            padding: 0;
-        }
-        .popup li {
-            margin-bottom: 10px;
-        }
-        .popup a {
-            color: #4ecdc4;
-            text-decoration: none;
-        }
-        .popup button {
-            margin-top: 20px;
-        }
     </style>
 </head>
 <body>
@@ -206,7 +167,7 @@
                 <option value="Chain">Chain Cube 2048🎲</option>
                 <option value="Train">Train Miner🚂</option>
             </select>
-            <button onclick="checkSubscriptionAndGenerateKeys()">إنشاء مفاتيح الهامستر 🐹</button>
+            <button onclick="generateKeys()">إنشاء مفاتيح الهامستر 🐹</button>
             <button onclick="copyKeys()">نسخ المفاتيح المستلمة 📋</button>
             <div class="loading">
                 <div class="loading-text">جاري إنشاء المفاتيح، يرجى الانتظار... 🤌</div>
@@ -217,15 +178,6 @@
         <div class="form-container">
             <h2>Terminal 💻</h2>
             <pre id="jsonDataDisplay" class="key-display"></pre>
-        </div>
-    </div>
-
-    <div id="subscriptionPopup" class="popup">
-        <div class="popup-content">
-            <h2>اشتراك إجباري</h2>
-            <p>يرجى الاشتراك في القنوات التالية للمتابعة:</p>
-            <ul id="channelList"></ul>
-            <button onclick="checkSubscriptionAgain()">تحقق مرة أخرى</button>
         </div>
     </div>
 
@@ -259,13 +211,6 @@
         let HASH = 'test_hash';
         let generatedKeys = [];
         
-        // Simulated list of required channels
-        const requiredChannels = [
-            { name: "Hamster keys", url: "https://t.me/Hamst9rkeys" },
-            { name: "Ghosts Net School", url: "https://t.me/GhostsNetSchool" },
-            { name: "Telegram Airdrops", url: "https://t.me/MiniApps_Airdrop" }
-        ];
-
         function updateConstants() {
             const selectedApp = document.getElementById('appSelect').value;
             APP_TOKEN = appConfigs[selectedApp].appToken;
@@ -398,8 +343,7 @@
                 });
                 const data = await response.json();
                 return data.promoCode;
-            }
-            catch (error) {
+            } catch (error) {
                 console.error('Error generating key:', error);
                 return null;
             }
@@ -455,7 +399,7 @@
         
             const validKeys = keys.filter(key => key !== null);
             generatedKeys = validKeys.slice(-4); // Keep the last 4
-            if (validKeys.length > 0) {
+if (validKeys.length > 0) {
                 appendToDisplay(`المفاتيح الصالحة: ${validKeys.join(', ')} 🔑`);
             } else {
                 appendToDisplay('تم الانتهاء 🫡');
@@ -499,55 +443,6 @@
                 });
             } else {
                 alert('لا توجد مفاتيح للنسخ. 🚫');
-            }
-        }
-
-        // Function to check if user is subscribed to all required channels
-        function checkSubscription() {
-            // This is a placeholder function. In a real implementation, 
-            // you would need to use the Telegram Bot API to check subscriptions.
-            return Math.random() < 0.5; // Simulates a 50% chance of being subscribed
-        }
-
-        // Function to display the subscription popup
-        function showSubscriptionPopup() {
-            const popup = document.getElementById('subscriptionPopup');
-            const channelList = document.getElementById('channelList');
-            channelList.innerHTML = ''; // Clear existing list
-            requiredChannels.forEach(channel => {
-                const li = document.createElement('li');
-                const a = document.createElement('a');
-                a.href = channel.url;
-                a.target = '_blank';
-                a.textContent = channel.name;
-                li.appendChild(a);
-                channelList.appendChild(li);
-            });
-            popup.style.display = 'block';
-        }
-
-        // Function to hide the subscription popup
-        function hideSubscriptionPopup() {
-            document.getElementById('subscriptionPopup').style.display = 'none';
-        }
-
-        // Function to check subscription and generate keys if subscribed
-        function checkSubscriptionAndGenerateKeys() {
-            if (checkSubscription()) {
-                hideSubscriptionPopup();
-                generateKeys();
-            } else {
-                showSubscriptionPopup();
-            }
-        }
-
-        // Function to recheck subscription
-        function checkSubscriptionAgain() {
-            if (checkSubscription()) {
-                hideSubscriptionPopup();
-                generateKeys();
-            } else {
-                alert('لم يتم الاشتراك في جميع القنوات المطلوبة بعد. يرجى المحاولة مرة أخرى.');
             }
         }
     </script>
