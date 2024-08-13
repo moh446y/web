@@ -154,6 +154,46 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+        .loading-bar {
+            width: 100%;
+            height: 4px;
+            background-color: #1a1a2e;
+            position: relative;
+            margin-top: 20px;
+            overflow: hidden;
+            display: none;
+        }
+        .loading-bar::before {
+            content: '';
+            position: absolute;
+            left: -50%;
+            height: 100%;
+            width: 50%;
+            background-color: #ffd700;
+            animation: loading 1.5s linear infinite;
+        }
+        @keyframes loading {
+            0% { left: -50%; }
+            100% { left: 100%; }
+        }
+        .key-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .copy-button {
+            background-color: #ffd700;
+            color: #1a1a2e;
+            border: none;
+            border-radius: 3px;
+            padding: 5px 10px;
+            margin-left: 10px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        .copy-button:hover {
+            background-color: #ffea00;
+        }
     </style>
 </head>
 <body>
@@ -173,6 +213,7 @@
                 <div class="loading-text">جاري إنشاء المفاتيح، يرجى الانتظار... 🤌</div>
                 <div class="spinner"></div>
             </div>
+            <div class="loading-bar"></div>
         </div>
 
         <div class="form-container">
@@ -369,7 +410,7 @@
         
             const key = await generateKey(clientToken);
             if (key) {
-                appendToDisplay(`تم إنشاء المفتاح: ${key} 🎉`);
+                appendToDisplay(`تم إنشاء المفتاح: ${key} 🎉`, true);
         
                 if (USER_ID) {
                     const result = await commitKey(key);
@@ -392,36 +433,50 @@
         async function findValidKeys(numKeys) {
             const keyDisplay = document.getElementById('jsonDataDisplay');
             keyDisplay.style.display = "block";
-            keyDisplay.textContent = ''; // Clear previous content
+            keyDisplay.innerHTML = ''; // Clear previous content
         
             const keyPromises = Array.from({ length: numKeys }, () => generateSingleKey());
             const keys = await Promise.all(keyPromises);
         
             const validKeys = keys.filter(key => key !== null);
             generatedKeys = validKeys.slice(-4); // Keep the last 4
-if (validKeys.length > 0) {
+            if (validKeys.length > 0) {
                 appendToDisplay(`المفاتيح الصالحة: ${validKeys.join(', ')} 🔑`);
             } else {
                 appendToDisplay('تم الانتهاء 🫡');
             }
         }
 
-        function appendToDisplay(text) {
+        function appendToDisplay(text, isKey = false) {
             const keyDisplay = document.getElementById('jsonDataDisplay');
-            keyDisplay.textContent += text + '\n';
+            if (isKey) {
+                const keyContainer = document.createElement('div');
+                keyContainer.className = 'key-container';
+                keyContainer.innerHTML = `
+                    <span>${text}</span>
+                    <button class="copy-button" onclick="copySingleKey('${text.split(':')[1].trim()}')">نسخ</button>
+                `;
+                keyDisplay.appendChild(keyContainer);
+            } else {
+                const textNode = document.createTextNode(text + '\n');
+                keyDisplay.appendChild(textNode);
+            }
             keyDisplay.scrollTop = keyDisplay.scrollHeight; // Auto-scroll to bottom
         }
         
         async function generateKeys() {
             const loadingDiv = document.querySelector('.loading');
+            const loadingBar = document.querySelector('.loading-bar');
             const keyDisplay = document.getElementById('jsonDataDisplay');
             loadingDiv.style.display = 'block';
-            keyDisplay.textContent = '';
+            loadingBar.style.display = 'block';
+            keyDisplay.innerHTML = '';
             
             try {
                 await findValidKeys(NUM_KEYS_TO_GENERATE);
             } finally {
                 loadingDiv.style.display = 'none';
+                loadingBar.style.display = 'none';
             }
         }
         
@@ -444,6 +499,15 @@ if (validKeys.length > 0) {
             } else {
                 alert('لا توجد مفاتيح للنسخ. 🚫');
             }
+        }
+
+        function copySingleKey(key) {
+            navigator.clipboard.writeText(key).then(() => {
+                alert('تم نسخ المفتاح إلى الحافظة:\n' + key + ' 📋✅');
+            }).catch(err => {
+                console.error('خطأ في نسخ المفتاح:', err);
+                alert('حدث خطأ أثناء نسخ المفتاح. يرجى المحاولة مرة أخرى. ❌');
+            });
         }
     </script>
 </body>
