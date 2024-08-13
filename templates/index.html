@@ -131,21 +131,25 @@
             100% { background-position: 0 0; }
         }
         .notification {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background-color: #ffd700;
-            color: #1a1a2e;
-            padding: 15px 20px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            z-index: 1000;
-        }
-        .notification.show {
-            opacity: 1;
-        }
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(255, 215, 0, 0.9);
+    color: #1a1a2e;
+    padding: 20px 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 1000;
+    text-align: center;
+    font-size: 18px;
+    max-width: 80%;
+}
+.notification.show {
+    opacity: 1;
+}
         @media screen and (max-width: 800px) {
             .container {
                 flex-direction: column;
@@ -433,38 +437,39 @@
         }
         
         function copyKeys() {
-            const keyContainers = document.querySelectorAll('.key-container');
-            const keys = Array.from(keyContainers).map(container => container.querySelector('span').textContent);
-            if (keys.length > 0) {
-                const keysText = keys.join('\n');
-                navigator.clipboard.writeText(keysText).then(() => {
-                    showNotification('تم نسخ جميع المفاتيح بنجاح! 🎉');
-                }).catch(err => {
-                    console.error('خطأ في نسخ المفاتيح:', err);
-                    showNotification('حدث خطأ أثناء نسخ المفاتيح. يرجى المحاولة مرة أخرى. ❌');
-                });
-            } else {
-                showNotification('لا توجد مفاتيح للنسخ. 🚫');
-            }
-        }
+    const keyContainers = document.querySelectorAll('.key-container');
+    const keys = Array.from(keyContainers).map(container => container.querySelector('span').textContent);
+    if (keys.length > 0) {
+        const keysText = keys.join('\n');
+        navigator.clipboard.writeText(keysText).then(() => {
+            showNotification('تم نسخ جميع المفاتيح بنجاح! 🎉');
+        }).catch(err => {
+            console.error('خطأ في نسخ المفاتيح:', err);
+            showNotification('حدث خطأ أثناء نسخ المفاتيح. يرجى المحاولة مرة أخرى. ❌');
+        });
+    } else {
+        showNotification('لا توجد مفاتيح للنسخ. 🚫');
+    }
+}
 
         function copySingleKey(key) {
-            navigator.clipboard.writeText(key).then(() => {
-                showNotification('تم نسخ المفتاح بنجاح! 🎉');
-            }).catch(err => {
-                console.error('خطأ في نسخ المفتاح:', err);
-                showNotification('حدث خطأ أثناء نسخ المفتاح. يرجى المحاولة مرة أخرى. ❌');
-            });
-        }
+    navigator.clipboard.writeText(key).then(() => {
+        showNotification('تم نسخ المفتاح بنجاح! 🎉');
+    }).catch(err => {
+        console.error('خطأ في نسخ المفتاح:', err);
+        showNotification('حدث خطأ أثناء نسخ المفتاح. يرجى المحاولة مرة أخرى. ❌');
+    });
+}
 
         function showNotification(message) {
-            const notification = document.getElementById('notification');
-            notification.textContent = message;
-            notification.classList.add('show');
-            setTimeout(() => {
-                notification.classList.remove('show');
-            }, 3000);
-        }
+    const notification = document.getElementById('notification');
+    notification.textContent = message;
+    notification.classList.add('show');
+    setTimeout(() => {
+        notification.classList.remove('show');
+    }, 3000);
+}
     </script>
+    <div id="notification" class="notification"></div>
 </body>
     </html>
