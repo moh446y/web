@@ -92,30 +92,42 @@
             margin-bottom: 5px;
         }
         #jsonDataDisplay {
-            white-space: pre-wrap;
-            background-color: rgba(255, 255, 255, 0.1);
             padding: 15px;
-            border: 1px solid #ffd700;
-            border-radius: 5px;
-            margin-top: 15px;
             font-family: monospace;
             overflow-x: auto;
-            max-height: 200px;
             color: #e0e0e0;
         }
-        .json-key {
-            color: #ff6b6b;
+        .key-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 5px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
         }
-        .json-string {
-            color: #4ecdc4;
+        .copy-button {
+            background-color: #ffd700;
+            color: #1a1a2e;
+            border: none;
+            border-radius: 3px;
+            padding: 5px 10px;
+            cursor: pointer;
+            font-size: 12px;
         }
-        .json-boolean {
-            color: #feca57;
+        .copy-button:hover {
+            background-color: #ffea00;
         }
-        @media screen and (min-width: 801px) {
-            .container {
-                gap: 20px;
-            }
+        .loading-line {
+            height: 4px;
+            width: 100%;
+            background: linear-gradient(to right, #ffd700 0%, #ffd700 50%, transparent 50%, transparent 100%);
+            background-size: 200% 100%;
+            animation: loading 1s linear infinite;
+        }
+        @keyframes loading {
+            0% { background-position: 100% 0; }
+            100% { background-position: 0 0; }
         }
         @media screen and (max-width: 800px) {
             .container {
@@ -131,91 +143,6 @@
                 margin: 0 auto;
             }
         }
-        .loading {
-            display: none;
-            text-align: center;
-            margin-top: 20px;
-        }
-        .loading-text {
-            font-size: 18px;
-            color: #ffd700;
-            margin-bottom: 10px;
-        }
-        .spinner {
-            border: 4px solid rgba(255, 215, 0, 0.3);
-            border-radius: 50%;
-            border-top: 4px solid #ffd700;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        .loading-bar {
-            width: 100%;
-            height: 4px;
-            background-color: #1a1a2e;
-            position: relative;
-            margin-top: 20px;
-            overflow: hidden;
-            display: none;
-        }
-        .loading-bar::before {
-            content: '';
-            position: absolute;
-            left: -50%;
-            height: 100%;
-            width: 50%;
-            background-color: #ffd700;
-            animation: loading 1.5s linear infinite;
-        }
-        @keyframes loading {
-            0% { left: -50%; }
-            100% { left: 100%; }
-        }
-        .key-container {
-            display: flex;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-        .copy-button {
-            background-color: #ffd700;
-            color: #1a1a2e;
-            border: none;
-            border-radius: 3px;
-            padding: 5px 10px;
-            margin-left: 10px;
-            cursor: pointer;
-            font-size: 12px;
-        }
-        .copy-button:hover {
-            background-color: #ffea00;
-        }
-        .loading-line {
-        height: 4px;
-        width: 100%;
-        background: linear-gradient(to right, #ffd700 0%, #ffd700 50%, transparent 50%, transparent 100%);
-        background-size: 200% 100%;
-        animation: loading 1s linear infinite;
-    }
-
-    @keyframes loading {
-        0% { background-position: 100% 0; }
-        100% { background-position: 0 0; }
-    }
-
-    .key-container {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 10px;
-        padding: 5px;
-        background-color: rgba(255, 255, 255, 0.1);
-        border-radius: 5px;
-    }
     </style>
 </head>
 <body>
@@ -231,11 +158,6 @@
             </select>
             <button onclick="generateKeys()">إنشاء مفاتيح الهامستر 🐹</button>
             <button onclick="copyKeys()">نسخ المفاتيح المستلمة 📋</button>
-            <div class="loading">
-                <div class="loading-text">جاري إنشاء المفاتيح، يرجى الانتظار... 🤌</div>
-                <div class="spinner"></div>
-            </div>
-            <div class="loading-bar"></div>
         </div>
 
         <div class="form-container">
@@ -376,15 +298,14 @@
                     eventJson = await eventResponse.json();
 
                     if (eventJson.hasCode) {
-                        return true; // Successfully received the code
+                        return true;
                     }
 
-                    // Wait for 30 seconds before trying again
                     await sleep(30000);
 
                 } catch (error) {
                     console.error('Error during progress emulation:', error);
-                    return false; // Exit if an error occurs
+                    return false;
                 }
             } while (!eventJson.hasCode);
 
@@ -417,11 +338,8 @@
             const clientToken = await login(clientId);
         
             if (!clientToken) {
-                appendToDisplay('فشل تسجيل الدخول. تخطي إنشاء المفتاح. ❌');
                 return null;
             }
-        
-            appendToDisplay('تم تسجيل الدخول بنجاح، انتظر بينما يتم إنشاء المفاتيح... 🔑');
         
             for (let j = 0; j < 7; j++) {
                 if (await emulateProgress(clientToken)) {
@@ -432,44 +350,41 @@
         
             const key = await generateKey(clientToken);
             if (key) {
-                appendToDisplay(`تم إنشاء المفتاح: ${key} 🎉`, true);
+                appendToDisplay(key, true);
         
                 if (USER_ID) {
                     const result = await commitKey(key);
                     if (result.status === 'ok') {
-                        appendToDisplay(`النقاط: ${result.points} 🏆`);
                         return key;
                     } else {
-                        appendToDisplay('جاري إنشاء المفتاح التالي... 🔄');
                         return null;
                     }
                 } else {
                     return key;
                 }
             } else {
-                appendToDisplay('جاري إنشاء المفتاح التالي... 🔄');
                 return null;
             }
         }
 
         async function findValidKeys(numKeys) {
-    const keyDisplay = document.getElementById('jsonDataDisplay');
-    keyDisplay.innerHTML = '<div class="loading-line"></div>'; // Add loading line
-    
-    const keyPromises = Array.from({ length: numKeys }, () => generateSingleKey());
-    const keys = await Promise.all(keyPromises);
+            const keyDisplay = document.getElementById('jsonDataDisplay');
+            keyDisplay.innerHTML = '<div class="loading-line"></div>';
+            
+            const keyPromises = Array.from({ length: numKeys }, () => generateSingleKey());
+            const keys = await Promise.all(keyPromises);
 
-    const validKeys = keys.filter(key => key !== null);
-    generatedKeys = validKeys.slice(-4); // Keep last 4 keys
+            const validKeys = keys.filter(key => key !== null);
+            generatedKeys = validKeys.slice(-4);
 
-    keyDisplay.innerHTML = ''; // Clear loading line
-    
-    if (validKeys.length > 0) {
-        validKeys.forEach((key, index) => {
-            appendToDisplay(`المفتاح ${index + 1}: ${key}`, true);
-        });
-    }
-}
+            keyDisplay.innerHTML = '';
+            
+            if (validKeys.length > 0) {
+                validKeys.forEach((key, index) => {
+                    appendToDisplay(key, true);
+                });
+            }
+        }
 
         function appendToDisplay(text, isKey = false) {
             const keyDisplay = document.getElementById('jsonDataDisplay');
@@ -478,36 +393,27 @@
                 keyContainer.className = 'key-container';
                 keyContainer.innerHTML = `
                     <span>${text}</span>
-                    <button class="copy-button" onclick="copySingleKey('${text.split(':')[1].trim()}')">نسخ</button>
+                    <button class="copy-button" onclick="copySingleKey('${text}')">نسخ</button>
                 `;
                 keyDisplay.appendChild(keyContainer);
-            } else {
-                const textNode = document.createTextNode(text + '\n');
-                keyDisplay.appendChild(textNode);
             }
-            keyDisplay.scrollTop = keyDisplay.scrollHeight; // التمرير التلقائي إلى الأسفل
+            keyDisplay.scrollTop = keyDisplay.scrollHeight;
         }
         
         async function generateKeys() {
             const keyDisplay = document.getElementById('jsonDataDisplay');
-            keyDisplay.innerHTML = ''; // مسح المحتوى السابق
+            keyDisplay.innerHTML = '';
             
             try {
                 await findValidKeys(NUM_KEYS_TO_GENERATE);
             } catch (error) {
                 console.error('Error generating keys:', error);
-                appendToDisplay('حدث خطأ أثناء إنشاء المفاتيح 😔');
             }
         }
         
         function copyKeys() {
-            const keyDisplay = document.getElementById('jsonDataDisplay').textContent;
-            const keyPattern = /تم إنشاء المفتاح:\s([A-Za-z0-9\-]+)/g;
-            const keys = [];
-            let match;
-            while ((match = keyPattern.exec(keyDisplay)) !== null) {
-                keys.push(match[1]);
-            }
+            const keyContainers = document.querySelectorAll('.key-container');
+            const keys = Array.from(keyContainers).map(container => container.querySelector('span').textContent);
             if (keys.length > 0) {
                 const keysText = keys.join('\n');
                 navigator.clipboard.writeText(keysText).then(() => {
@@ -531,4 +437,4 @@
         }
     </script>
 </body>
-</html>
+    </html>
