@@ -122,34 +122,31 @@
         .loading-line {
             height: 4px;
             width: 100%;
-            background: linear-gradient(to right, #ffd700 0%, #ffd700 50%, transparent 50%, transparent 100%);
-            background-size: 200% 100%;
-            animation: loading 1s linear infinite;
-        }
-        @keyframes loading {
-            0% { background-position: 100% 0; }
-            100% { background-position: 0 0; }
+            background-color: #ffd700;
+            transform-origin: left;
+            transform: scaleX(0);
+            transition: transform 1s linear;
         }
         .notification {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: rgba(255, 215, 0, 0.9);
-    color: #1a1a2e;
-    padding: 20px 30px;
-    border-radius: 10px;
-    box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    z-index: 1000;
-    text-align: center;
-    font-size: 18px;
-    max-width: 80%;
-}
-.notification.show {
-    opacity: 1;
-}
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(255, 215, 0, 0.9);
+            color: #1a1a2e;
+            padding: 20px 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1000;
+            text-align: center;
+            font-size: 18px;
+            max-width: 80%;
+        }
+        .notification.show {
+            opacity: 1;
+        }
         @media screen and (max-width: 800px) {
             .container {
                 flex-direction: column;
@@ -178,12 +175,20 @@
                 <option value="Train">Train Miner🚂</option>
                 <option value="Merge">Merge Away🧩</option>
             </select>
-            <button onclick="generateKeys()">إنشاء مفاتيح الهامستر 🐹</button>
+            <label for="keyCount">عدد المفاتيح (1-4):</label>
+            <select id="keyCount">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+            </select>
+            <button id="generateButton" onclick="generateKeys()">إنشاء مفاتيح الهامستر 🐹</button>
             <button onclick="copyKeys()">نسخ المفاتيح المستلمة 📋</button>
         </div>
 
         <div class="form-container">
             <h2>Terminal 💻</h2>
+            <div id="loadingLine" class="loading-line"></div>
             <pre id="jsonDataDisplay" class="key-display"></pre>
         </div>
     </div>
@@ -218,7 +223,6 @@
         let PROMO_ID = appConfigs.Bike.promoId;
         const DEBUG_MODE = false;
         const EVENTS_DELAY = DEBUG_MODE ? 350 : 20000;
-        const NUM_KEYS_TO_GENERATE = 4;
         let USER_ID = 'test_id';
         let USER = 'test_user';
         let HASH = 'test_hash';
@@ -448,23 +452,27 @@
 
         async function findValidKeys(numKeys) {
             const keyDisplay = document.getElementById('jsonDataDisplay');
-            const loadingLine = document.createElement('div');
-            loadingLine.className = 'loading-line';
-            keyDisplay.appendChild(loadingLine);
+            const loadingLine = document.getElementById('loadingLine');
+            loadingLine.style.transform = 'scaleX(0)';
+            keyDisplay.innerHTML = '';
             
             const keyPromises = Array.from({ length: numKeys }, () => generateSingleKey());
+            
+            loadingLine.style.transition = `transform ${numKeys * 5}s linear`;
+            loadingLine.style.transform = 'scaleX(1)';
+            
             const keys = await Promise.all(keyPromises);
 
             const validKeys = keys.filter(key => key !== null);
-            generatedKeys = validKeys.slice(-4);
+            generatedKeys = validKeys;
 
-            keyDisplay.removeChild(loadingLine);
-            
             if (validKeys.length > 0) {
                 validKeys.forEach((key, index) => {
                     appendToDisplay(key, true);
                 });
             }
+            
+            document.getElementById('generateButton').style.display = 'none';
         }
 
         function appendToDisplay(text, isKey = false) {
@@ -482,11 +490,12 @@
         }
         
         async function generateKeys() {
+            const keyCount = parseInt(document.getElementById('keyCount').value);
             const keyDisplay = document.getElementById('jsonDataDisplay');
             keyDisplay.innerHTML = '';
             
             try {
-                await findValidKeys(NUM_KEYS_TO_GENERATE);
+                await findValidKeys(keyCount);
             } catch (error) {
                 console.error('Error generating keys:', error);
             }
