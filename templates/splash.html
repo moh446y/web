@@ -43,41 +43,54 @@
             position: absolute;
             width: 100%;
             height: 100%;
-            border: 10px solid transparent;
-            border-top: 10px solid red;
-            border-right: 10px solid green;
-            border-bottom: 10px solid blue;
-            border-left: 10px solid yellow;
-            animation: rotate-border 3s linear infinite;
+            border: 5px solid transparent;
             box-sizing: border-box;
             z-index: 3;
+            animation: move-border 10s linear infinite;
         }
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-        @keyframes rotate-border {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        .hidden {
-            display: none;
+        @keyframes move-border {
+            0% {
+                border-top-color: red;
+                border-right-color: green;
+                border-bottom-color: blue;
+                border-left-color: yellow;
+                transform: translate(0, 0);
+            }
+            25% {
+                transform: translate(calc(100% - 10px), 0);
+            }
+            50% {
+                transform: translate(calc(100% - 10px), calc(100% - 10px));
+            }
+            75% {
+                transform: translate(0, calc(100% - 10px));
+            }
+            100% {
+                transform: translate(0, 0);
+            }
         }
         .reco {
             position: absolute;
             top: 20px;
             font-size: 3rem;
             font-weight: bold;
-            background: linear-gradient(45deg, red, orange, yellow, green, blue, indigo, violet);
+            background: linear-gradient(90deg, red, orange, yellow, green, blue, indigo, violet);
             background-clip: text;
             -webkit-background-clip: text;
             color: transparent;
-            animation: color-change 3s linear infinite;
+            animation: color-change 5s linear infinite;
             z-index: 4;
         }
         @keyframes color-change {
             0% { background-position: 0% 50%; }
             100% { background-position: 100% 50%; }
+        }
+        .hidden {
+            display: none;
         }
     </style>
     <script>
