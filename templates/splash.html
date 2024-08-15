@@ -27,6 +27,7 @@
             align-items: center;
             background: url('/static/photo/index.jpg') no-repeat center center;
             background-size: cover;
+            z-index: 1;
         }
         .spinner {
             width: 100px;
@@ -36,13 +37,47 @@
             border-radius: 50%;
             animation: spin 1s linear infinite;
             position: absolute;
+            z-index: 2;
+        }
+        .rotating-border {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border: 10px solid transparent;
+            border-top: 10px solid red;
+            border-right: 10px solid green;
+            border-bottom: 10px solid blue;
+            border-left: 10px solid yellow;
+            animation: rotate-border 3s linear infinite;
+            box-sizing: border-box;
+            z-index: 3;
         }
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+        @keyframes rotate-border {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
         .hidden {
             display: none;
+        }
+        .reco {
+            position: absolute;
+            top: 20px;
+            font-size: 3rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, red, orange, yellow, green, blue, indigo, violet);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            animation: color-change 3s linear infinite;
+            z-index: 4;
+        }
+        @keyframes color-change {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
         }
     </style>
     <script>
@@ -50,13 +85,15 @@
             setTimeout(function() {
                 document.querySelector('.splash-screen').classList.add('hidden');
                 window.location.href = "/index";
-            }, 5000); // 10 seconds
+            }, 5000); // 5 seconds
         });
     </script>
 </head>
 <body>
     <div class="splash-screen">
         <div class="spinner"></div>
+        <div class="rotating-border"></div>
+        <div class="reco">Reco</div>
     </div>
 </body>
 </html>
