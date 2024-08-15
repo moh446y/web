@@ -472,7 +472,8 @@
                 });
             }
             
-            document.getElementById('generateButton').style.display = 'none';
+            // Show the generate button again after completion
+            document.getElementById('generateButton').style.display = 'block';
         }
 
         function appendToDisplay(text, isKey = false) {
@@ -494,10 +495,17 @@
             const keyDisplay = document.getElementById('jsonDataDisplay');
             keyDisplay.innerHTML = '';
             
+            const loadingLine = document.getElementById('loadingLine');
+            loadingLine.style.transform = 'scaleX(0)';
+            
             try {
                 await findValidKeys(keyCount);
             } catch (error) {
                 console.error('Error generating keys:', error);
+            } finally {
+                // Ensure the loading line is fully filled when keys are generated
+                loadingLine.style.transition = 'transform 0.5s ease';
+                loadingLine.style.transform = 'scaleX(1)';
             }
         }
         
