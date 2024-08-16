@@ -5,11 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Reco Splash Screen</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;700&display=swap');
+
         body, html {
             margin: 0;
             padding: 0;
             height: 100%;
             overflow: hidden;
+            font-family: 'Poppins', sans-serif;
         }
         .splash-screen {
             position: fixed;
@@ -20,7 +23,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background: linear-gradient(45deg, #1a1a1a, #2c2c2c);
+            background: linear-gradient(135deg, #2c3e50, #34495e);
             overflow: hidden;
         }
         .content {
@@ -31,31 +34,20 @@
             z-index: 2;
         }
         .logo {
-            width: 150px;
-            height: 150px;
+            width: 200px;
+            height: 200px;
             background: url('/static/photo/logo.png') no-repeat center center;
             background-size: contain;
-            margin-bottom: 20px;
-        }
-        .spinner {
-            width: 80px;
-            height: 80px;
-            border: 8px solid rgba(255, 255, 255, 0.3);
-            border-top-color: #3498db;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
+            margin-bottom: 30px;
+            animation: pulse 3s ease-in-out infinite;
         }
         .reco {
-            font-size: 3rem;
-            font-weight: bold;
-            background: linear-gradient(90deg, #ff4e50, #f9d423);
-            background-clip: text;
-            -webkit-background-clip: text;
-            color: transparent;
-            margin-top: 20px;
-            font-family: 'Arial', sans-serif;
-            letter-spacing: 2px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            font-size: 4.5rem;
+            font-weight: 700;
+            color: #ecf0f1;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            letter-spacing: 4px;
+            animation: fadeIn 2s ease-out;
         }
         .particles {
             position: absolute;
@@ -68,37 +60,31 @@
         .particle {
             position: absolute;
             display: block;
-            background-color: rgba(255, 255, 255, 0.8);
-            width: 6px;
-            height: 6px;
+            background-color: rgba(236, 240, 241, 0.5);
+            width: 4px;
+            height: 4px;
             border-radius: 50%;
-            animation: rise 15s infinite ease-in;
+            animation: float 15s infinite ease-in-out;
         }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
         }
-        @keyframes rise {
-            0% {
-                bottom: -100px;
-                transform: translateX(0);
-            }
-            50% {
-                transform: translateX(100px);
-            }
-            100% {
-                bottom: 1080px;
-                transform: translateX(-200px);
-            }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-        .hidden {
-            display: none;
+        @keyframes float {
+            0%, 100% { transform: translateY(0) translateX(0); }
+            25% { transform: translateY(-30px) translateX(30px); }
+            50% { transform: translateY(-60px) translateX(-30px); }
+            75% { transform: translateY(-30px) translateX(30px); }
         }
     </style>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script>
         window.addEventListener('load', function() {
-            // Telegram WebApp initialization
             if (window.Telegram && window.Telegram.WebApp) {
                 window.Telegram.WebApp.ready();
                 window.Telegram.WebApp.expand();
@@ -106,17 +92,16 @@
 
             // Create particles
             const particlesContainer = document.querySelector('.particles');
-            for (let i = 0; i < 50; i++) {
+            for (let i = 0; i < 30; i++) {
                 const particle = document.createElement('span');
                 particle.className = 'particle';
                 particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
                 particle.style.animationDelay = Math.random() * 15 + 's';
                 particlesContainer.appendChild(particle);
             }
 
-            // Redirect after 5 seconds
             setTimeout(function() {
-                document.querySelector('.splash-screen').classList.add('hidden');
                 window.location.href = "/index";
             }, 5000);
         });
@@ -127,8 +112,7 @@
         <div class="particles"></div>
         <div class="content">
             <div class="logo"></div>
-            <div class="spinner"></div>
-            <div class="reco">Reco</div>
+            <div class="reco">RECO</div>
         </div>
     </div>
 </body>
