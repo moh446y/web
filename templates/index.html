@@ -173,7 +173,8 @@
                 <option value="Clone">My Clone Army🪞</option>
                 <option value="Chain">Chain Cube 2048🎲</option>
                 <option value="Train">Train Miner🚂</option>
-                <option value="Merge">Merge Away🧩</option>
+                <option value="Merge">Merge Away👨‍🍳</option>
+                <option value="Hamster">Twerk Race🐹</option>
             </select>
             <label for="keyCount">عدد المفاتيح (1-4):</label>
             <select id="keyCount">
@@ -216,6 +217,10 @@
             Merge: {
                 appToken: '8d1cc2ad-e097-4b86-90ef-7a27e19fb833',
                 promoId: 'dc128d28-c45b-411c-98ff-ac7726fbaea4'
+            },
+            Hamster: {
+                appToken: '61308365-9d16-4040-8bb0-2f4a4c69074c',
+                promoId: '61308365-9d16-4040-8bb0-2f4a4c69074c'
             }
         };
 
@@ -286,22 +291,12 @@
                     method: 'POST',
                     headers: {
                         'Host': 'api.gamepromo.io',
-                        'Connection': 'keep-alive',
-                        'Content-Length': '123',
-                        'sec-ch-ua': '"Not)A;Brand";v="99", "Android WebView";v="127", "Chromium";v="127"',
-                        'Accept': 'application/json, text/plain, */*',
-                        'sec-ch-ua-platform': '"Android"',
-                        'sec-ch-ua-mobile': '?1',
-                        'User-Agent': 'Mozilla/5.0 (Linux; Android 13; M2101K9AG Build/TKQ1.221013.002; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/127.0.6533.103 Mobile Safari/537.36',
+                        'User-Agent': 'UnityPlayer/2021.3.15f1 (UnityWebRequest/1.0, libcurl/7.84.0-DEV)',
+                        'Accept': '*/*',
+                        'Accept-Encoding': 'deflate, gzip',
                         'Content-Type': 'application/json',
-                        'Origin': 'https://ppg-game4.b-cdn.net',
-                        'X-Requested-With': 'games.playpack.mergeaway',
-                        'Sec-Fetch-Site': 'cross-site',
-                        'Sec-Fetch-Mode': 'cors',
-                        'Sec-Fetch-Dest': 'empty',
-                        'Referer': 'https://ppg-game4.b-cdn.net/',
-                        'Accept-Encoding': 'gzip, deflate, br, zstd',
-                        'Accept-Language': 'ar-EG,ar;q=0.9,en-US;q=0.8,en;q=0.7'
+                        'X-Unity-Version': '2021.3.15f1',
+                        'Content-Length': '123'
                     },
                     body: JSON.stringify({
                         appToken: APP_TOKEN,
@@ -321,30 +316,19 @@
             const eventUrl = 'https://api.gamepromo.io/promo/register-event';
             const headers = {
                 'Host': 'api.gamepromo.io',
-                'Connection': 'keep-alive',
-                'Content-Length': '152',
-                'sec-ch-ua': '"Not)A;Brand";v="99", "Android WebView";v="127", "Chromium";v="127"',
-                'Accept': 'application/json, text/plain, */*',
-                'sec-ch-ua-platform': '"Android"',
-                'sec-ch-ua-mobile': '?1',
-                'Authorization': `Bearer ${clientToken}`,
-                'User-Agent': 'Mozilla/5.0 (Linux; Android 13; M2101K9AG Build/TKQ1.221013.002; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/127.0.6533.103 Mobile Safari/537.36',
+                'User-Agent': 'UnityPlayer/2021.3.15f1 (UnityWebRequest/1.0, libcurl/7.84.0-DEV)',
+                'Accept': '*/*',
+                'Accept-Encoding': 'deflate, gzip',
                 'Content-Type': 'application/json',
-                'Origin': 'https://ppg-game4.b-cdn.net',
-                'X-Requested-With': 'games.playpack.mergeaway',
-                'Sec-Fetch-Site': 'cross-site',
-                'Sec-Fetch-Mode': 'cors',
-                'Sec-Fetch-Dest': 'empty',
-                'Referer': 'https://ppg-game4.b-cdn.net/',
-                'Accept-Encoding': 'gzip, deflate, br, zstd',
-                'Accept-Language': 'ar-EG,ar;q=0.9,en-US;q=0.8,en;q=0.7'
+                'Authorization': `Bearer ${clientToken}`,
+                'X-Unity-Version': '2021.3.15f1',
+                'Content-Length': '99'
             };
-            const eventId = generateClientId();
+            const eventId = 'StartLevel';
             const eventData = {
                 promoId: PROMO_ID,
                 eventOrigin: 'undefined',
-                eventId: eventId,
-                eventType: 'spend-energy'
+                eventId: eventId
             };
 
             let eventResponse;
@@ -388,23 +372,13 @@
                     method: 'POST',
                     headers: {
                         'Host': 'api.gamepromo.io',
-                        'Connection': 'keep-alive',
-                        'Content-Length': '50',
-                        'sec-ch-ua': '"Not)A;Brand";v="99", "Android WebView";v="127", "Chromium";v="127"',
-                        'Accept': 'application/json, text/plain, */*',
-                        'sec-ch-ua-platform': '"Android"',
-                        'sec-ch-ua-mobile': '?1',
-                        'Authorization': `Bearer ${clientToken}`,
-                        'User-Agent': 'Mozilla/5.0 (Linux; Android 13; M2101K9AG Build/TKQ1.221013.002; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/127.0.6533.103 Mobile Safari/537.36',
+                        'User-Agent': 'UnityPlayer/2021.3.15f1 (UnityWebRequest/1.0, libcurl/7.84.0-DEV)',
+                        'Accept': '*/*',
+                        'Accept-Encoding': 'deflate, gzip',
                         'Content-Type': 'application/json',
-                        'Origin': 'https://ppg-game4.b-cdn.net',
-                        'X-Requested-With': 'games.playpack.mergeaway',
-                        'Sec-Fetch-Site': 'cross-site',
-                        'Sec-Fetch-Mode': 'cors',
-                        'Sec-Fetch-Dest': 'empty',
-                        'Referer': 'https://ppg-game4.b-cdn.net/',
-                        'Accept-Encoding': 'gzip, deflate, br, zstd',
-                        'Accept-Language': 'ar-EG,ar;q=0.9,en-US;q=0.8,en;q=0.7'
+                        'Authorization': `Bearer ${clientToken}`,
+                        'X-Unity-Version': '2021.3.15f1',
+                        'Content-Length': '50'
                     },
                     body: JSON.stringify({ promoId: PROMO_ID })
                 });
@@ -544,4 +518,4 @@
         }
     </script>
 </body>
-    </html>
+</html>
