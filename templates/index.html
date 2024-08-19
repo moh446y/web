@@ -122,13 +122,10 @@
         .loading-line {
             height: 4px;
             width: 100%;
-            background: linear-gradient(to right, #ffd700 0%, #ffd700 50%, transparent 50%, transparent 100%);
-            background-size: 200% 100%;
-            animation: loading 1s linear infinite;
-        }
-        @keyframes loading {
-            0% { background-position: 100% 0; }
-            100% { background-position: 0 0; }
+            background-color: #ffd700;
+            transform-origin: left;
+            transform: scaleX(0);
+            transition: transform 1s linear;
         }
         .notification {
             position: fixed;
@@ -169,64 +166,74 @@
 <body>
     <div class="container">
         <div class="form-container">
-            <h2>Hamster keys 👨🏻‍💻🤖</h2>
-            <label for="appSelect">Choose the application:</label>
+            <h2>مفاتيح هامستر 👨🏻‍💻🤖</h2>
+            <label for="appSelect">اختر التطبيق:</label>
             <select id="appSelect" onchange="updateConstants()">
                 <option value="Bike">Bike Ride 3D🚴‍♂️</option>
                 <option value="Clone">My Clone Army🪞</option>
                 <option value="Chain">Chain Cube 2048🎲</option>
                 <option value="Train">Train Miner🚂</option>
                 <option value="Merge">Merge Away👨‍🍳</option>
-                <option value="Twerk">Twerk Race🏃‍♂️</option>
+                <option value="Hamster">Twerk Race🐹</option>
             </select>
-            <label for="keyCount">Number of keys (1-4):</label>
+            <label for="keyCount">عدد المفاتيح (1-4):</label>
             <select id="keyCount">
                 <option value="1">1</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
                 <option value="4">4</option>
             </select>
-            <button onclick="generateKeys()"> Create hamster keys 🐹</button>
-            <button onclick="copyKeys()">Copy received keys 📋</button>
+            <button id="generateButton" onclick="generateKeys()">إنشاء مفاتيح الهامستر 🐹</button>
+            <button onclick="copyKeys()">نسخ المفاتيح المستلمة 📋</button>
         </div>
+
         <div class="form-container">
             <h2>Terminal 💻</h2>
+            <div id="loadingLine" class="loading-line"></div>
             <pre id="jsonDataDisplay" class="key-display"></pre>
         </div>
     </div>
+
     <div id="notification" class="notification"></div>
+
     <script>
         const appConfigs = {
             Bike: {
                 appToken: 'd28721be-fd2d-4b45-869e-9f253b554e50',
-                promoId: '43e35910-c168-4634-ad4f-52fd764a843f'
+                promoId: '43e35910-c168-4634-ad4f-52fd764a843f',
+                waitTime: 20000
             },
             Clone: {
                 appToken: '74ee0b5b-775e-4bee-974f-63e7f4d5bacb',
-                promoId: 'fe693b26-b342-4159-8808-15e3ff7f8767'
+                promoId: 'fe693b26-b342-4159-8808-15e3ff7f8767',
+                waitTime: 120000
             },
             Chain: {
                 appToken: 'd1690a07-3780-4068-810f-9b5bbf2931b2',
-                promoId: 'b4170868-cef0-424f-8eb9-be0622e8e8e3'
+                promoId: 'b4170868-cef0-424f-8eb9-be0622e8e8e3',
+                waitTime: 20000
             },
             Train: {
                 appToken: '82647f43-3f87-402d-88dd-09a90025313f',
-                promoId: 'c4480ac7-e178-4973-8061-9ed5b2e17954'
+                promoId: 'c4480ac7-e178-4973-8061-9ed5b2e17954',
+                waitTime: 20000
             },
             Merge: {
                 appToken: '8d1cc2ad-e097-4b86-90ef-7a27e19fb833',
-                promoId: 'dc128d28-c45b-411c-98ff-ac7726fbaea4'
+                promoId: 'dc128d28-c45b-411c-98ff-ac7726fbaea4',
+                waitTime: 20000
             },
-            Twerk: {
+            Hamster: {
                 appToken: '61308365-9d16-4040-8bb0-2f4a4c69074c',
-                promoId: '61308365-9d16-4040-8bb0-2f4a4c69074c' 
+                promoId: '61308365-9d16-4040-8bb0-2f4a4c69074c',
+                waitTime: 20000
             }
         };
+
         let APP_TOKEN = appConfigs.Bike.appToken;
         let PROMO_ID = appConfigs.Bike.promoId;
+        let WAIT_TIME = appConfigs.Bike.waitTime;
         const DEBUG_MODE = false;
-        const EVENTS_DELAY = DEBUG_MODE ? 350 : 20000;
-        const NUM_KEYS_TO_GENERATE = 4;
         let USER_ID = 'test_id';
         let USER = 'test_user';
         let HASH = 'test_hash';
@@ -236,12 +243,15 @@
             const selectedApp = document.getElementById('appSelect').value;
             APP_TOKEN = appConfigs[selectedApp].appToken;
             PROMO_ID = appConfigs[selectedApp].promoId;
+            WAIT_TIME = appConfigs[selectedApp].waitTime;
         }
+
         function generateClientId() {
             const timestamp = Date.now();
             const randomNumbers = Array.from({ length: 19 }, () => Math.floor(Math.random() * 10)).join('');
             return `${timestamp}-${randomNumbers}`;
         }
+
         function generateDeviceId() {
             const baseDeviceId = '00000000000-0000000000000000000';
             const randomDigits = Array.from({ length: 5 }, () => Math.floor(Math.random() * 10)).join('');
@@ -252,9 +262,11 @@
             }
             return deviceIdArray.join('');
         }
+
         function sleep(ms) {
             return new Promise(resolve => setTimeout(resolve, ms));
         }
+
         async function commitKey(key) {
             const keyData = {
                 id: USER_ID,
@@ -275,6 +287,7 @@
                 return { status: 'error' };
             }
         }
+
         async function login(clientId) {
             if (DEBUG_MODE) {
                 return `${APP_TOKEN}:deviceid:${deviceId}:${Date.now()}`;
@@ -285,22 +298,12 @@
                     method: 'POST',
                     headers: {
                         'Host': 'api.gamepromo.io',
-                        'Connection': 'keep-alive',
-                        'Content-Length': '123',
-                        'sec-ch-ua': '"Not)A;Brand";v="99", "Android WebView";v="127", "Chromium";v="127"',
-                        'Accept': 'application/json, text/plain, */*',
-                        'sec-ch-ua-platform': '"Android"',
-                        'sec-ch-ua-mobile': '?1',
-                        'User-Agent': 'Mozilla/5.0 (Linux; Android 13; M2101K9AG Build/TKQ1.221013.002; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/127.0.6533.103 Mobile Safari/537.36',
+                        'User-Agent': 'UnityPlayer/2021.3.15f1 (UnityWebRequest/1.0, libcurl/7.84.0-DEV)',
+                        'Accept': '*/*',
+                        'Accept-Encoding': 'deflate, gzip',
                         'Content-Type': 'application/json',
-                        'Origin': 'https://ppg-game4.b-cdn.net',
-                        'X-Requested-With': 'games.playpack.mergeaway',
-                        'Sec-Fetch-Site': 'cross-site',
-                        'Sec-Fetch-Mode': 'cors',
-                        'Sec-Fetch-Dest': 'empty',
-                        'Referer': 'https://ppg-game4.b-cdn.net/',
-                        'Accept-Encoding': 'gzip, deflate, br, zstd',
-                        'Accept-Language': 'ar-EG,ar;q=0.9,en-US;q=0.8,en;q=0.7'
+                        'X-Unity-Version': '2021.3.15f1',
+                        'Content-Length': '123'
                     },
                     body: JSON.stringify({
                         appToken: APP_TOKEN,
@@ -315,73 +318,58 @@
                 return null;
             }
         }
+
         async function emulateProgress(clientToken) {
-    const eventUrl = 'https://api.gamepromo.io/promo/register-event';
-    const headers = {
-        'Host': 'api.gamepromo.io',
-        'Connection': 'keep-alive',
-        'Content-Length': '152',
-        'sec-ch-ua': '"Not)A;Brand";v="99", "Android WebView";v="127", "Chromium";v="127"',
-        'Accept': 'application/json, text/plain, */*',
-        'sec-ch-ua-platform': '"Android"',
-        'sec-ch-ua-mobile': '?1',
-        'Authorization': `Bearer ${clientToken}`,
-        'User-Agent': 'Mozilla/5.0 (Linux; Android 13; M2101K9AG Build/TKQ1.221013.002; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/127.0.6533.103 Mobile Safari/537.36',
-        'Content-Type': 'application/json',
-        'Origin': 'https://ppg-game4.b-cdn.net',
-        'X-Requested-With': 'games.playpack.mergeaway',
-        'Sec-Fetch-Site': 'cross-site',
-        'Sec-Fetch-Mode': 'cors',
-        'Sec-Fetch-Dest': 'empty',
-        'Referer': 'https://ppg-game4.b-cdn.net/',
-        'Accept-Encoding': 'gzip, deflate, br, zstd',
-        'Accept-Language': 'ar-EG,ar;q=0.9,en-US;q=0.8,en;q=0.7'
-    };
-    const eventId = generateClientId();
-    const eventData = {
-        promoId: PROMO_ID,
-        eventOrigin: 'undefined',
-        eventId: eventId,
-        eventType: 'spend-energy'
-    };
+            const eventUrl = 'https://api.gamepromo.io/promo/register-event';
+            const headers = {
+                'Host': 'api.gamepromo.io',
+                'User-Agent': 'UnityPlayer/2021.3.15f1 (UnityWebRequest/1.0, libcurl/7.84.0-DEV)',
+                'Accept': '*/*',
+                'Accept-Encoding': 'deflate, gzip',
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${clientToken}`,
+                'X-Unity-Version': '2021.3.15f1',
+                'Content-Length': '99'
+            };
+            const eventId = 'StartLevel';
+            const eventData = {
+                promoId: PROMO_ID,
+                eventOrigin: 'undefined',
+                eventId: eventId
+            };
 
-    let eventResponse;
-    let eventJson;
+            let eventResponse;
+            let eventJson;
 
-    do {
-        try {
-            eventResponse = await fetch(eventUrl, {
-                method: 'POST',
-                headers: headers,
-                body: JSON.stringify(eventData)
-            });
+            do {
+                try {
+                    eventResponse = await fetch(eventUrl, {
+                        method: 'POST',
+                        headers: headers,
+                        body: JSON.stringify(eventData)
+                    });
 
-            if (!eventResponse.ok) {
-                throw new Error(`Error: ${eventResponse.statusText}`);
-            }
+                    if (!eventResponse.ok) {
+                        throw new Error(`Error: ${eventResponse.statusText}`);
+                    }
 
-            eventJson = await eventResponse.json();
+                    eventJson = await eventResponse.json();
 
-            if (!eventJson) {
-                // إذا لم يتم استلام أي رد، انتظر 20 ثانية قبل المحاولة مرة أخرى
-                await sleep(20000);
-            } else if (eventJson.error_code === "TooManyRegister" && eventJson.error_message === "Register event timeout") {
-                console.warn('Register event timeout. Waiting for 120 seconds before retrying...');
-                await sleep(120000);  // انتظر 120 ثانية
-            } else if (eventJson.hasCode) {
-                return true;
-            } else {
-                await sleep(120000);  // انتظر 120 ثانية إذا لم يكن هناك كود
-            }
+                    if (eventJson.hasCode) {
+                        return true;
+                    }
 
-        } catch (error) {
-            console.error('Error during progress emulation:', error);
+                    await sleep(WAIT_TIME);
+
+                } catch (error) {
+                    console.error('Error during progress emulation:', error);
+                    return false;
+                }
+            } while (!eventJson.hasCode);
+
             return false;
         }
-    } while (!eventJson || !eventJson.hasCode);
 
-    return false;
-}
         async function generateKey(clientToken) {
             if (DEBUG_MODE) {
                 return Math.random() < 0.5 ? 'PROMO-3YD-5ZA6-3VJA-Y77' : '';
@@ -391,23 +379,13 @@
                     method: 'POST',
                     headers: {
                         'Host': 'api.gamepromo.io',
-                        'Connection': 'keep-alive',
-                        'Content-Length': '50',
-                        'sec-ch-ua': '"Not)A;Brand";v="99", "Android WebView";v="127", "Chromium";v="127"',
-                        'Accept': 'application/json, text/plain, */*',
-                        'sec-ch-ua-platform': '"Android"',
-                        'sec-ch-ua-mobile': '?1',
-                        'Authorization': `Bearer ${clientToken}`,
-                        'User-Agent': 'Mozilla/5.0 (Linux; Android 13; M2101K9AG Build/TKQ1.221013.002; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/127.0.6533.103 Mobile Safari/537.36',
+                        'User-Agent': 'UnityPlayer/2021.3.15f1 (UnityWebRequest/1.0, libcurl/7.84.0-DEV)',
+                        'Accept': '*/*',
+                        'Accept-Encoding': 'deflate, gzip',
                         'Content-Type': 'application/json',
-                        'Origin': 'https://ppg-game4.b-cdn.net',
-                        'X-Requested-With': 'games.playpack.mergeaway',
-                        'Sec-Fetch-Site': 'cross-site',
-                        'Sec-Fetch-Mode': 'cors',
-                        'Sec-Fetch-Dest': 'empty',
-                        'Referer': 'https://ppg-game4.b-cdn.net/',
-                        'Accept-Encoding': 'gzip, deflate, br, zstd',
-                        'Accept-Language': 'ar-EG,ar;q=0.9,en-US;q=0.8,en;q=0.7'
+                        'Authorization': `Bearer ${clientToken}`,
+                        'X-Unity-Version': '2021.3.15f1',
+                        'Content-Length': '50'
                     },
                     body: JSON.stringify({ promoId: PROMO_ID })
                 });
@@ -431,7 +409,7 @@
                 if (await emulateProgress(clientToken)) {
                     break;
                 }
-                await sleep(EVENTS_DELAY);
+                await sleep(WAIT_TIME);
             }
         
             const key = await generateKey(clientToken);
@@ -452,24 +430,32 @@
                 return null;
             }
         }
+
         async function findValidKeys(numKeys) {
             const keyDisplay = document.getElementById('jsonDataDisplay');
-            const loadingLine = document.createElement('div');
-            loadingLine.className = 'loading-line';
-            keyDisplay.appendChild(loadingLine);
+            const loadingLine = document.getElementById('loadingLine');
+            loadingLine.style.transform = 'scaleX(0)';
+            keyDisplay.innerHTML = '';
             
             const keyPromises = Array.from({ length: numKeys }, () => generateSingleKey());
-            const keys = await Promise.all(keyPromises);
-            const validKeys = keys.filter(key => key !== null);
-            generatedKeys = validKeys.slice(-4);
-            keyDisplay.removeChild(loadingLine);
             
+            loadingLine.style.transition = `transform ${numKeys * 5}s linear`;
+            loadingLine.style.transform = 'scaleX(1)';
+            
+            const keys = await Promise.all(keyPromises);
+
+            const validKeys = keys.filter(key => key !== null);
+            generatedKeys = validKeys;
+
             if (validKeys.length > 0) {
                 validKeys.forEach((key, index) => {
                     appendToDisplay(key, true);
                 });
             }
+            
+            document.getElementById('generateButton').style.display = 'block';
         }
+
         function appendToDisplay(text, isKey = false) {
             const keyDisplay = document.getElementById('jsonDataDisplay');
             if (isKey) {
@@ -477,7 +463,7 @@
                 keyContainer.className = 'key-container';
                 keyContainer.innerHTML = `
                     <span>${text}</span>
-                    <button class="copy-button" onclick="copySingleKey('${text}')">copy</button>
+                    <button class="copy-button" onclick="copySingleKey('${text}')">نسخ</button>
                 `;
                 keyDisplay.appendChild(keyContainer);
             }
@@ -485,16 +471,20 @@
         }
         
         async function generateKeys() {
+            const keyCount = parseInt(document.getElementById('keyCount').value);
             const keyDisplay = document.getElementById('jsonDataDisplay');
             keyDisplay.innerHTML = '';
-            // الحصول على عدد المفاتيح المختار من القائمة المنسدلة
-            const keyCountSelect = document.getElementById('keyCount');
-            const numKeys = parseInt(keyCountSelect.value, 10);
+            
+            const loadingLine = document.getElementById('loadingLine');
+            loadingLine.style.transform = 'scaleX(0)';
+            
             try {
-                // توليد عدد المفاتيح المحدد
-                await findValidKeys(numKeys);
+                await findValidKeys(keyCount);
             } catch (error) {
                 console.error('Error generating keys:', error);
+            } finally {
+                loadingLine.style.transition = 'transform 0.5s ease';
+                loadingLine.style.transform = 'scaleX(1)';
             }
         }
         
@@ -504,23 +494,25 @@
             if (keys.length > 0) {
                 const keysText = keys.join('\n');
                 navigator.clipboard.writeText(keysText).then(() => {
-                    showNotification('All keys have been copied successfully! 🎉');
+                    showNotification('تم نسخ جميع المفاتيح بنجاح! 🎉');
                 }).catch(err => {
-                    console.error('Error copying keys:', err);
-                    showNotification('An error occurred while copying keys. Please try again. ❌');
+                    console.error('خطأ في نسخ المفاتيح:', err);
+                    showNotification('حدث خطأ أثناء نسخ المفاتيح. يرجى المحاولة مرة أخرى. ❌');
                 });
             } else {
-                showNotification('There are no keys to copy. 🚫');
+                showNotification('لا توجد مفاتيح للنسخ. 🚫');
             }
         }
+
         function copySingleKey(key) {
             navigator.clipboard.writeText(key).then(() => {
-                showNotification('Key copied successfully! 🎉');
+                showNotification('تم نسخ المفتاح بنجاح! 🎉');
             }).catch(err => {
-                console.error('Error copying key:', err);
-                showNotification('An error occurred while copying the key. Please try again. ❌');
+                console.error('خطأ في نسخ المفتاح:', err);
+                showNotification('حدث خطأ أثناء نسخ المفتاح. يرجى المحاولة مرة أخرى. ❌');
             });
         }
+
         function showNotification(message) {
             const notification = document.getElementById('notification');
             notification.textContent = message;
@@ -529,6 +521,10 @@
                 notification.classList.remove('show');
             }, 3000);
         }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            updateConstants();
+        });
     </script>
 </body>
     </html>
