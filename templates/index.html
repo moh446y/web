@@ -175,14 +175,6 @@
             <option value="2">2</option>
             <option value="3">3</option>
             <option value="4">4</option>
-            <option value="5">5</option>
-            <option value="6">6</option>
-            <option value="7">7</option>
-            <option value="8">8</option>
-            <option value="9">9</option>
-            <option value="10">10</option>
-            <option value="11">11</option>
-            <option value="12">12</option>
         </select>
         <button id="createKeysButton" onclick="generateKeys()">Create keys 🔑</button>
     </div>
@@ -468,22 +460,22 @@
     }
 
     async function findValidKeys(numKeys) {
-      const keyDisplay = document.getElementById('jsonDataDisplay');
-      const loadingLine = document.createElement('div');
-      loadingLine.className = 'loading-line';
-      keyDisplay.appendChild(loadingLine);
-    
-      const keyPromises = Array.from({ length: numKeys }, () => generateSingleKey());
-      const keys = await Promise.all(keyPromises);
-      const validKeys = keys.filter(key => key !== null);
-      generatedKeys = validKeys; // Store all valid keys
-      keyDisplay.removeChild(loadingLine);
-    
-      if (validKeys.length > 0) {
-        validKeys.forEach((key, index) => {
-          appendToDisplay(key, true);
-        });
-      }
+        const keyDisplay = document.getElementById('jsonDataDisplay');
+        const loadingLine = document.createElement('div');
+        loadingLine.className = 'loading-line';
+        keyDisplay.appendChild(loadingLine);
+        
+        const keyPromises = Array.from({ length: numKeys }, () => generateSingleKey());
+        const keys = await Promise.all(keyPromises);
+        const validKeys = keys.filter(key => key !== null);
+        generatedKeys = validKeys.slice(-4);
+        keyDisplay.removeChild(loadingLine);
+        
+        if (validKeys.length > 0) {
+            validKeys.forEach((key, index) => {
+                appendToDisplay(key, true);
+            });
+        }
     }
         
     function appendToDisplay(text, isKey = false) {
@@ -501,26 +493,26 @@
     }
         
     async function generateKeys() {
-       const keyDisplay = document.getElementById('jsonDataDisplay');
-       keyDisplay.innerHTML = '';
-       const keyCountSelect = document.getElementById('keyCount');
-       const numKeys = parseInt(keyCountSelect.value, 10);
-       const createKeysButton = document.getElementById('createKeysButton');
-       const copyAllKeysButton = document.getElementById('copyAllKeysButton');
-    
-       try {
-         createKeysButton.style.display = 'none';
-         copyAllKeysButton.style.display = 'none';
-         await findValidKeys(numKeys);
-         if (generatedKeys.length > 0) {
-           copyAllKeysButton.style.display = 'block';
-         }
-       } catch (error) {
-         console.error('Error generating keys:', error);
-       } finally {
-         createKeysButton.style.display = 'inline-block';
-       }
-     }
+        const keyDisplay = document.getElementById('jsonDataDisplay');
+        keyDisplay.innerHTML = '';
+        const keyCountSelect = document.getElementById('keyCount');
+        const numKeys = parseInt(keyCountSelect.value, 10);
+        const createKeysButton = document.getElementById('createKeysButton');
+        const copyAllKeysButton = document.getElementById('copyAllKeysButton');
+        
+        try {
+            createKeysButton.style.display = 'none';
+            copyAllKeysButton.style.display = 'none';
+            await findValidKeys(numKeys);
+            if (generatedKeys.length > 0) {
+                copyAllKeysButton.style.display = 'block';
+            }
+        } catch (error) {
+            console.error('Error generating keys:', error);
+        } finally {
+            createKeysButton.style.display = 'inline-block';
+        }
+    }
         
     function copyTextToClipboard(text) {
         if (navigator.clipboard && window.isSecureContext) {
@@ -551,13 +543,13 @@
     }
 
     function copyAllKeys() {
-      const allKeys = generatedKeys.join('\n');
-      copyTextToClipboard(allKeys).then(() => {
-        showNotification('All keys copied successfully! 🎉');
-      }).catch(err => {
-        console.error('Error copying keys:', err);
-        showNotification('An error occurred while copying the keys. Please try again. ❌');
-      });
+        const allKeys = generatedKeys.join('\n');
+        copyTextToClipboard(allKeys).then(() => {
+            showNotification('All keys copied successfully! 🎉');
+        }).catch(err => {
+            console.error('Error copying keys:', err);
+            showNotification('An error occurred while copying the keys. Please try again. ❌');
+        });
     }
         
     function showNotification(message) {
