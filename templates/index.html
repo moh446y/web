@@ -187,10 +187,6 @@
 
 <script>
     const appConfigs = {
-        Bike: {
-            appToken: 'd28721be-fd2d-4b45-869e-9f253b554e50',
-            promoId: '43e35910-c168-4634-ad4f-52fd764a843f'
-        },
         Chain: {
             appToken: 'd1690a07-3780-4068-810f-9b5bbf2931b2',
             promoId: 'b4170868-cef0-424f-8eb9-be0622e8e8e3'
@@ -215,18 +211,14 @@
             appToken: 'ef319a80-949a-492e-8ee0-424fb5fc20a6',
             promoId: 'ef319a80-949a-492e-8ee0-424fb5fc20a6'
         },
-        MudRacing: {
-            appToken: '8814a785-97fb-4177-9193-ca4180ff9da8',
-            promoId: '8814a785-97fb-4177-9193-ca4180ff9da8'
-        },
         CafeDash: {
             appToken: 'bc0971b8-04df-4e72-8a3e-ec4dc663cd11',
             promoId: 'bc0971b8-04df-4e72-8a3e-ec4dc663cd11'
         }
     };
 
-   let APP_TOKEN = '';
-   let PROMO_ID = '';
+    let APP_TOKEN = '';
+    let PROMO_ID = '';
     const DEBUG_MODE = false;
     const EVENTS_DELAY = DEBUG_MODE ? 350 : 20000;
     let generatedKeys = [];
@@ -234,16 +226,15 @@
     const games = [
         { name: "Cafe Dash", image: "https://cdn.hamsterkombat.io/cafe_dash/image.webp", value: "CafeDash", isNew: true },
         { name: "Mow and Trim", image: "https://cdn.hamsterkombat.io/mow_trim/image.webp", value: "MowAndTrim", isNew: false },
-        { name: "Mud Racing", image: "https://cdn.hamsterkombat.io/mud_racing/image.webp", value: "MudRacing", isNew: false },
         { name: "Polysphere", image: "https://cdn.hamsterkombat.io/polysphere/image.webp", value: "Polysphere", isNew: false },
         { name: "Twerk Race", image: "https://cdn.hamsterkombat.io/twerk/image.webp", value: "Twerk" },
         { name: "Merge Away", image: "https://cdn.hamsterkombat.io/merge_away/image.webp", value: "Merge" },
         { name: "Chain Cube 2048", image: "https://cdn.hamsterkombat.io/chain_cube/image.webp", value: "Chain" },
-        { name: "Train Miner", image: "https://cdn.hamsterkombat.io/train_miner/image.webp", value: "Train" },
-        { name: "Bike Ride 3D", image: "https://cdn.hamsterkombat.io/bikeride/image.webp", value: "Bike" }
+        { name: "Train Miner", image: "https://cdn.hamsterkombat.io/train_miner/image.webp", value: "Train" }
+        
     ];
 
-    function createGameGrid() {
+function createGameGrid() {
       const gameGrid = document.getElementById('gameGrid');
       games.forEach(game => {
         const gameItem = document.createElement('div');
@@ -574,4 +565,4 @@
     createGameGrid();
   </script>
 </body>
-</html>
+    </html>
