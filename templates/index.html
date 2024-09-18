@@ -276,6 +276,14 @@
           HideBall: {
             appToken: '4bf4966c-4d22-439b-8ff2-dc5ebca1a600',
             promoId: '4bf4966c-4d22-439b-8ff2-dc5ebca1a600'
+          },
+        Pin_Out_Master: {
+            appToken: 'd2378baf-d617-417a-9d99-d685824335f0',
+            promoId: 'd2378baf-d617-417a-9d99-d685824335f0'
+          },
+        Count_Masters: {
+            appToken: '4bdc17da-2601-449b-948e-f8c7bd376553',
+            promoId: '4bdc17da-2601-449b-948e-f8c7bd376553'
           }
         };
 
@@ -287,78 +295,90 @@
 
         const games = [
           {
+            name: "Pin Out Master",
+            image: 'https://cdn.hamsterkombat.io/pin_out/image.webp',
+            value: "Pin_Out_Master",
+            isNew: true
+         },
+          {
+            name: "Count Masters",
+            image: "https://cdn.hamsterkombat.io/countmasters/image.webp",
+            value: "Count_Masters",
+            isNew: true
+         },
+          {
             name: "Hide Ball",
             image: "https://cdn.hamsterkombat.io/hide_balls/image.webp",
             value: "HideBall",
-            isNew: true
-          
-          },
+            isNew: false
+         },
           {
             name: "Bouncemasters",
             image: "https://cdn.hamsterkombat.io/bouncemasters/image.webp",
             value: "Bouncemasters",
-            isNew: true
-          
-          },
+            isNew: false
+         },
+          {
+            name: "Merge Away",
+            image: "https://cdn.hamsterkombat.io/merge_away/image.webp",
+            value: "Merge",
+            isNew: false
+         },
           {
             name: "Stone Age",
             image: "https://cdn.hamsterkombat.io/stone_age/image.webp",
             value: "StoneAge",
             isNew: false
-            
-          },
-
-            {
-                name: "Fluff Crusade",
-                image: "https://cdn.hamsterkombat.io/fluff/image.webp",
-                value: "FluffCrusade",
-                isNew: false
-            },
-            {
-                name: "Tile Trio",
-                image: "https://cdn.hamsterkombat.io/tile_trio/image.webp",
-                value: "TileTrio",
-                isNew: false
-            },
-            {    
-                name: "Zoopolis",
-                image: "https://cdn.hamsterkombat.io/zoopolis/image.webp",
-                value: "Zoopolis",
-                isNew: false
-            },
-            {
-                name: "Mow and Trim",
-                image: "https://cdn.hamsterkombat.io/mow_trim/image.webp",
-                value: "MowAndTrim",
-                isNew: false
-            },
-            {
-                name: "Polysphere",
-                image: "https://cdn.hamsterkombat.io/polysphere/image.webp",
-                value: "Polysphere",
-                isNew: false
-            },
-            {
-                name: "Twerk Race",
-                image: "https://cdn.hamsterkombat.io/twerk/image.webp",
-                value: "Twerk"
-            },
-            {
-                name: "Merge Away",
-                image: "https://cdn.hamsterkombat.io/merge_away/image.webp",
-                value: "Merge"
-            },
-            {
-                name: "Chain Cube 2048",
-                image: "https://cdn.hamsterkombat.io/chain_cube/image.webp",
-                value: "Chain"
-            },
-            {
-                name: "Train Miner",
-                image: "https://cdn.hamsterkombat.io/train_miner/image.webp",
-                value: "Train"
-            }
-        ];
+         },
+          {
+            name: "Train Miner",
+            image: "https://cdn.hamsterkombat.io/train_miner/image.webp",
+            value: "Train",
+            isNew: false
+         },
+          {
+            name: "Mow and Trim",
+            image: "https://cdn.hamsterkombat.io/mow_trim/image.webp",
+            value: "MowAndTrim",
+            isNew: false
+         },
+          {
+            name: "Chain Cube 2048",
+            image: "https://cdn.hamsterkombat.io/chain_cube/image.webp",
+            value: "Chain",
+            isNew: false
+         },
+          {
+            name: "Fluff Crusade",
+            image: "https://cdn.hamsterkombat.io/fluff/image.webp",
+            value: "FluffCrusade",
+            isNew: false
+         },
+          {
+            name: "Polysphere",
+            image: "https://cdn.hamsterkombat.io/polysphere/image.webp",
+            value: "Polysphere",
+            isNew: false
+         },
+          {
+            name: "Twerk Race",
+            image: "https://cdn.hamsterkombat.io/twerk/image.webp",
+            value: "Twerk",
+            isNew: false
+         },
+          {
+            name: "Zoopolis",
+            image: "https://cdn.hamsterkombat.io/zoopolis/image.webp",
+            value: "Zoopolis",
+            isNew: false
+         },
+          {
+            name: "Tile Trio",
+            image: "https://cdn.hamsterkombat.io/tile_trio/image.webp",
+            value: "TileTrio",
+            isNew: false
+         }
+         ];
 
         function createGameGrid() {
           const gameGrid = document.getElementById('gameGrid');
