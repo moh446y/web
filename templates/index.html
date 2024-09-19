@@ -284,7 +284,19 @@
         Count_Masters: {
             appToken: '4bdc17da-2601-449b-948e-f8c7bd376553',
             promoId: '4bdc17da-2601-449b-948e-f8c7bd376553'
-          }
+          },
+        Infected_Frontier:{
+          appToken: 'eb518c4b-e448-4065-9d33-06f3039f0fcb',
+          promoId: 'eb518c4b-e448-4065-9d33-06f3039f0fcb'
+        },
+        Among_Water: {
+          appToken: 'daab8f83-8ea2-4ad0-8dd5-d33363129640',
+          promoId: 'daab8f83-8ea2-4ad0-8dd5-d33363129640'
+        },
+        Factory_World: {
+          appToken: 'd02fc404-8985-4305-87d8-32bd4e66bb16',
+          promoId: 'd02fc404-8985-4305-87d8-32bd4e66bb16'
+        }
         };
 
         let APP_TOKEN = '';
@@ -294,6 +306,24 @@
         let generatedKeys = [];
 
         const games = [
+          {
+            name: 'Factory World',
+            image: 'https://cdn.hamsterkombat.io/factory_world/image.webp',
+            value: "Factory_World",
+            isNew: true
+          },
+          {
+            name: "Among Water",
+            image: 'https://cdn.hamsterkombat.io/among_water/image.webp',
+            value: "Among_Water",
+            isNew: true
+          },
+          {
+            name: "Infected Frontier",
+            image: 'https://cdn.hamsterkombat.io/infected_frontier/image.webp',
+            value: "Infected_Frontier",
+            isNew: true
+          },
           {
             name: "Pin Out Master",
             image: 'https://cdn.hamsterkombat.io/pin_out/image.webp',
@@ -702,4 +732,4 @@
         createGameGrid();
     </script>
 </body>
-</html>
+    </html>
